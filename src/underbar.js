@@ -282,13 +282,7 @@
    return obj;
 
 
-/*
- _.each(Array.prototype.slice.call(arguments, 1), function(object){
-  _.each(object, function(prop, key){
-    obj[key] === undefined ...........
-  });
-});	  
-  */
+
   };
 
 
@@ -332,18 +326,26 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-  
-    var memos = {};
-  
-    return function(){
-      var argument = arguments.slice;  
+   
+    var cache = {};
 
-        if(!memos[argument]){
-	  memos[argument] = func.apply(this, arguments);
-        }
-       return memos[argument];
+    return function(){
+      //create an actual array containing the argument
+      for(var key in arguments){
+        if(!Array.isArray(arguments[key])){ 
+      var argument = Array.prototype.slice.call(arguments); //if the object property is undefined, create a property by using the argument as the key and assign the value to it   
       }
+      }
+
+    if(cache[argument] === undefined){
+        cache[argument] = func.apply(this, argument);
+	}
+    return cache[argument];
+    }
   };
+	
+	
+	
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
   //
@@ -352,7 +354,7 @@
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
 
-  var argument = arguments.slice(2);
+  var argument = Array.prototype.slice.call(arguments, 2);
     return setTimeout(function() {
       func.apply(this, argument);
     }, wait);
@@ -370,10 +372,17 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
-   var arr = [];
-   var index = Math.floor(Math.random() * array.length); 
-    
+   var newArray = array.slice(0);
+   var randomArray = [];
    
+   while(newArray.length > 0){	  
+     var randomIndex = Math.floor(Math.random() * newArray.length); 
+   
+     randomArray.push(newArray[randomIndex]);
+
+     newArray.splice(randomIndex,1);
+   }
+   return randomArray;
   };
 
 
