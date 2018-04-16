@@ -333,8 +333,8 @@
       //create an actual array containing the argument
       for(var key in arguments){
         if(!Array.isArray(arguments[key])){ 
-      var argument = Array.prototype.slice.call(arguments); //if the object property is undefined, create a property by using the argument as the key and assign the value to it   
-      }
+          var argument = Array.prototype.slice.call(arguments);    
+        }
       }
 
     if(cache[argument] === undefined){
